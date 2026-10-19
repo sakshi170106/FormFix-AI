@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="How FormFix AI Works — A transparent 5-step verification protocol to audit application documents before submission.">
+  <title>How It Works — FormFix AI | Intelligent Document Laboratory</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- TOP NAVBAR ONLY (No Sidebar) -->
+  <header class="top-navbar">
+    <div class="nav-container">
+      <a class="brand" href="index.html">
+        <span class="brand-symbol">F</span>
+        <span>FormFix <span class="brand-ai-tag">AI</span></span>
+      </a>
+
+      <nav class="nav-links" id="navLinks">
+        <a href="index.html" class="nav-link" data-i18n="nav_home">Home</a>
+        <a href="features.html" class="nav-link" data-i18n="nav_features">Features</a>
+        <a href="how-it-works.html" class="nav-link active" data-i18n="nav_how_it_works">How It Works</a>
+        <a href="reports.html" class="nav-link" data-i18n="nav_reports">My Reports</a>
+      </nav>
+
+      <div class="nav-controls">
+        <div class="lang-selector-wrapper">
+          <select class="language-select" aria-label="Select Language">
+            <option value="en">English</option>
+            <option value="mr">मराठी</option>
+            <option value="hi">हिंदी</option>
+          </select>
+          <span class="lang-arrow">▾</span>
+        </div>
+
+        <div id="navGuestBox" class="nav-auth-box">
+          <a href="login.html" class="btn btn-secondary btn-sm" data-i18n="nav_login">Log In</a>
+          <a href="signup.html" class="btn btn-primary btn-sm" data-i18n="nav_signup">Sign Up</a>
+        </div>
+
+        <div id="navUserBox" class="nav-auth-box" hidden>
+          <div class="user-badge-nav">
+            <span id="navAvatar" class="user-badge-avatar">U</span>
+            <span id="navUserName" class="user-badge-name">User</span>
+          </div>
+          <button type="button" id="navLogoutBtn" class="btn btn-secondary btn-sm" data-i18n="nav_logout">Log Out</button>
+        </div>
+
+        <button type="button" id="mobileNavToggle" class="mobile-nav-toggle" aria-label="Toggle navigation">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- PAGE HEADER BANNER -->
+    <section class="page-header-banner">
+      <div class="container text-center">
+        <span class="section-eyebrow eyebrow-dark" data-i18n="hiw_hero_eyebrow">THE 5-STEP PROTOCOL</span>
+        <h1 class="section-title title-white" data-i18n="hiw_hero_title">How FormFix AI Verifies Applications</h1>
+        <p class="section-desc desc-light" data-i18n="hiw_hero_sub">A transparent, structured workflow designed to catch errors before official reviewers see them.</p>
+      </div>
+    </section>
+
+    <!-- 5-STEP PROGRESS WORKFLOW -->
+    <section class="container" style="padding: 70px 24px;">
+      <div class="workflow-steps-stack">
+        <!-- Step 1 -->
+        <article class="workflow-step-card">
+          <div class="step-badge-num" data-i18n="hiw_step1_num">01</div>
+          <div class="step-card-content">
+            <h3 data-i18n="hiw_step1_title">Choose Your Application Track</h3>
+            <p data-i18n="hiw_step1_desc">Select Scholarship, College Admission, Internship, or Custom to activate tailored checklist rules.</p>
+          </div>
+        </article>
+
+        <!-- Step 2 -->
+        <article class="workflow-step-card">
+          <div class="step-badge-num" data-i18n="hiw_step2_num">02</div>
+          <div class="step-card-content">
+            <h3 data-i18n="hiw_step2_title">Upload Supporting Documents</h3>
+            <p data-i18n="hiw_step2_desc">Drag and drop your PDF certificates, marksheets, identity cards, and photographs into the laboratory workspace.</p>
+          </div>
+        </article>
+
+        <!-- Step 3 -->
+        <article class="workflow-step-card">
+          <div class="step-badge-num" data-i18n="hiw_step3_num">03</div>
+          <div class="step-card-content">
+            <h3 data-i18n="hiw_step3_title">Execute Deep Binary Verification</h3>
+            <p data-i18n="hiw_step3_desc">FormFix AI reads raw byte headers, checks integrity against declared mime types, and catches renamed text files.</p>
+          </div>
+        </article>
+
+        <!-- Step 4 -->
+        <article class="workflow-step-card">
+          <div class="step-badge-num" data-i18n="hiw_step4_num">04</div>
+          <div class="step-card-content">
+            <h3 data-i18n="hiw_step4_title">Review Detected Issues &amp; Checklist</h3>
+            <p data-i18n="hiw_step4_desc">Receive an immediate diagnostic report with color-coded badges indicating valid, warning, or error states.</p>
+          </div>
+        </article>
+
+        <!-- Step 5 -->
+        <article class="workflow-step-card">
+          <div class="step-badge-num" data-i18n="hiw_step5_num">05</div>
+          <div class="step-card-content">
+            <h3 data-i18n="hiw_step5_title">Fix Errors &amp; Submit With Confidence</h3>
+            <p data-i18n="hiw_step5_desc">Replace flagged files, confirm missing items, and export your verification record for peace of mind.</p>
+          </div>
+        </article>
+      </div>
+
+      <!-- CTA -->
+      <div class="text-center" style="margin-top: 56px;">
+        <a href="index.html#checker" class="btn btn-primary btn-lg" data-i18n="hero_cta_primary">Check My Documents Now →</a>
+      </div>
+    </section>
+  </main>
+
+  <!-- PROFESSIONAL FOOTER -->
+  <footer class="site-footer">
+    <div class="container footer-columns">
+      <div class="footer-brand">
+        <a class="brand" href="index.html">
+          <span class="brand-symbol">F</span>
+          <span>FormFix <span class="brand-ai-tag">AI</span></span>
+        </a>
+        <p data-i18n="brand_tagline">Every Detail Matters. Every Application Deserves a Second Chance.</p>
+      </div>
+
+      <div class="footer-nav-col">
+        <h4 data-i18n="footer_nav_heading">Navigation</h4>
+        <div class="footer-nav-links">
+          <a href="index.html" data-i18n="nav_home">Home</a>
+          <a href="features.html" data-i18n="nav_features">Features</a>
+          <a href="how-it-works.html" data-i18n="nav_how_it_works">How It Works</a>
+          <a href="reports.html" data-i18n="nav_reports">My Reports</a>
+          <a href="login.html" data-i18n="nav_login">Log In</a>
+        </div>
+      </div>
+
+      <div class="footer-legal-col">
+        <h4 data-i18n="footer_legal_heading">Integrity &amp; Privacy</h4>
+        <p data-i18n="footer_disclaimer">
+          FormFix AI is an automated preparatory auditing tool. Always verify mandatory rules with your official admissions or granting authority.
+        </p>
+        <small data-i18n="footer_rights">© 2026 FormFix AI. All rights reserved.</small>
+      </div>
+    </div>
+  </footer>
+
+  <script src="i18n.js"></script>
+  <script src="web.js"></script>
+</body>
+</html>

@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Sign Up for FormFix AI — Create your free document verification account and inspect applications with confidence.">
+  <title>Sign Up — FormFix AI | Intelligent Document Laboratory</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- TOP NAVBAR ONLY (No Sidebar) -->
+  <header class="top-navbar">
+    <div class="nav-container">
+      <a class="brand" href="index.html">
+        <span class="brand-symbol">F</span>
+        <span>FormFix <span class="brand-ai-tag">AI</span></span>
+      </a>
+
+      <nav class="nav-links" id="navLinks">
+        <a href="index.html" class="nav-link" data-i18n="nav_home">Home</a>
+        <a href="features.html" class="nav-link" data-i18n="nav_features">Features</a>
+        <a href="how-it-works.html" class="nav-link" data-i18n="nav_how_it_works">How It Works</a>
+        <a href="reports.html" class="nav-link" data-i18n="nav_reports">My Reports</a>
+      </nav>
+
+      <div class="nav-controls">
+        <div class="lang-selector-wrapper">
+          <select class="language-select" aria-label="Select Language">
+            <option value="en">English</option>
+            <option value="mr">मराठी</option>
+            <option value="hi">हिंदी</option>
+          </select>
+          <span class="lang-arrow">▾</span>
+        </div>
+
+        <div id="navGuestBox" class="nav-auth-box">
+          <a href="login.html" class="btn btn-secondary btn-sm" data-i18n="nav_login">Log In</a>
+          <a href="signup.html" class="btn btn-primary btn-sm" data-i18n="nav_signup">Sign Up</a>
+        </div>
+
+        <div id="navUserBox" class="nav-auth-box" hidden>
+          <div class="user-badge-nav">
+            <span id="navAvatar" class="user-badge-avatar">U</span>
+            <span id="navUserName" class="user-badge-name">User</span>
+          </div>
+          <button type="button" id="navLogoutBtn" class="btn btn-secondary btn-sm" data-i18n="nav_logout">Log Out</button>
+        </div>
+
+        <button type="button" id="mobileNavToggle" class="mobile-nav-toggle" aria-label="Toggle navigation">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="auth-page-wrapper">
+    <div class="auth-form-card">
+      <div class="auth-form-header">
+        <span class="section-eyebrow" data-i18n="nav_signup">CREATE ACCOUNT</span>
+        <h2 data-i18n="auth_signup_title">Create Your Account</h2>
+        <p data-i18n="auth_signup_sub">Start verifying applications and track submission readiness with FormFix AI.</p>
+      </div>
+
+      <div id="signupAlert" class="form-alert-banner alert-error" hidden role="alert" style="margin-bottom: 20px;"></div>
+
+      <form id="pageSignupForm" class="workspace-form">
+        <!-- Full Name -->
+        <div class="form-group">
+          <label for="signupName" class="form-label" data-i18n="auth_name_label">Full Name</label>
+          <input id="signupName" name="name" type="text" maxlength="80" required autocomplete="name"
+                 class="form-input" data-i18n-placeholder="auth_name_placeholder" placeholder="Enter your legal full name">
+        </div>
+
+        <!-- Email -->
+        <div class="form-group">
+          <label for="signupEmail" class="form-label" data-i18n="auth_email_label">Email Address</label>
+          <input id="signupEmail" name="email" type="email" required autocomplete="email"
+                 class="form-input" data-i18n-placeholder="auth_email_placeholder" placeholder="you@example.com">
+        </div>
+
+        <!-- Password -->
+        <div class="form-group">
+          <label for="signupPassword" class="form-label" data-i18n="auth_pass_label">Password</label>
+          <div class="input-password-wrapper">
+            <input id="signupPassword" name="password" type="password" minlength="8" required autocomplete="new-password"
+                   class="form-input" data-i18n-placeholder="auth_pass_placeholder" placeholder="At least 8 characters">
+            <button type="button" class="btn-toggle-pass" data-i18n="auth_show_pass">Show</button>
+          </div>
+          <!-- Password Strength Indicator -->
+          <div class="pass-strength-bar">
+            <div id="passStrengthFill" class="pass-strength-fill"></div>
+          </div>
+          <span id="passStrengthText" class="pass-strength-text"></span>
+        </div>
+
+        <!-- Confirm Password -->
+        <div class="form-group">
+          <label for="signupConfirmPassword" class="form-label" data-i18n="auth_confirm_pass_label">Confirm Password</label>
+          <div class="input-password-wrapper">
+            <input id="signupConfirmPassword" name="confirmPassword" type="password" minlength="8" required autocomplete="new-password"
+                   class="form-input" data-i18n-placeholder="auth_confirm_pass_placeholder" placeholder="Re-enter your password">
+            <button type="button" class="btn-toggle-pass" data-i18n="auth_show_pass">Show</button>
+          </div>
+        </div>
+
+        <button type="submit" id="signupSubmitBtn" class="btn btn-primary btn-block btn-lg" style="margin-top: 6px;">
+          <span data-i18n="auth_btn_signup">Create Free Account</span>
+          <span class="spinner-inline" hidden></span>
+        </button>
+      </form>
+
+      <p class="auth-switch-prompt">
+        <span data-i18n="auth_have_account">Already have an account?</span>
+        <a href="login.html" data-i18n="auth_link_login">Log In</a>
+      </p>
+    </div>
+  </main>
+
+  <!-- PROFESSIONAL FOOTER -->
+  <footer class="site-footer">
+    <div class="container footer-columns">
+      <div class="footer-brand">
+        <a class="brand" href="index.html">
+          <span class="brand-symbol">F</span>
+          <span>FormFix <span class="brand-ai-tag">AI</span></span>
+        </a>
+        <p data-i18n="brand_tagline">Every Detail Matters. Every Application Deserves a Second Chance.</p>
+      </div>
+
+      <div class="footer-nav-col">
+        <h4 data-i18n="footer_nav_heading">Navigation</h4>
+        <div class="footer-nav-links">
+          <a href="index.html" data-i18n="nav_home">Home</a>
+          <a href="features.html" data-i18n="nav_features">Features</a>
+          <a href="how-it-works.html" data-i18n="nav_how_it_works">How It Works</a>
+          <a href="reports.html" data-i18n="nav_reports">My Reports</a>
+          <a href="login.html" data-i18n="nav_login">Log In</a>
+        </div>
+      </div>
+
+      <div class="footer-legal-col">
+        <h4 data-i18n="footer_legal_heading">Integrity &amp; Privacy</h4>
+        <p data-i18n="footer_disclaimer">
+          FormFix AI is an automated preparatory auditing tool. Always verify mandatory rules with your official admissions or granting authority.
+        </p>
+        <small data-i18n="footer_rights">© 2026 FormFix AI. All rights reserved.</small>
+      </div>
+    </div>
+  </footer>
+
+  <script src="i18n.js"></script>
+  <script src="web.js"></script>
+</body>
+</html>

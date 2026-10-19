@@ -1,0 +1,24 @@
+{
+  "name": "formfix-ai-backend",
+  "version": "1.0.0",
+  "description": "FormFix AI - Smart Application Error Detective Backend",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js",
+    "test": "node test_backend.js && node test_server_http.js && node test_checks_authenticated.js && node test_multipage_routes.js && node audit_frontend.js && node test_e2e_verification.js",
+    "verify:atlas": "node verify_mongodb_atlas.js"
+  },
+  "engines": {
+    "node": ">=18"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.21.2",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.2.0",
+    "multer": "^1.4.5-lts.1"
+  }
+}

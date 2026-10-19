@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="FormFix AI — Intelligent document verification platform. Catch missing documents, format issues, and verify application readiness before submitting.">
+  <title>FormFix AI</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+  <!-- TOP NAVBAR  -->
+  <header class="top-navbar navbar-dark">
+    <div class="nav-container">
+      <a class="brand" href="index.html">
+        <span class="brand-symbol">F</span>
+        <span>FormFix <span class="brand-ai-tag">AI</span></span>
+      </a>
+
+      <!-- Navigation Links -->
+      <nav class="nav-links" id="navLinks">
+        <a href="index.html" class="nav-link active" data-i18n="nav_home">Home</a>
+        <a href="features.html" class="nav-link" data-i18n="nav_features">Features</a>
+        <a href="how-it-works.html" class="nav-link" data-i18n="nav_how_it_works">How It Works</a>
+        <a href="reports.html" class="nav-link" data-i18n="nav_reports">My Reports</a>
+      </nav>
+
+      <!-- Navbar Controls: Language & Auth -->
+      <div class="nav-controls">
+        <!-- Language Selector -->
+        <div class="lang-selector-wrapper">
+          <select class="language-select" aria-label="Select Language">
+            <option value="en">English</option>
+            <option value="mr">मराठी</option>
+            <option value="hi">हिंदी</option>
+          </select>
+          <span class="lang-arrow">▾</span>
+        </div>
+
+        <!-- Guest Auth Controls -->
+        <div id="navGuestBox" class="nav-auth-box">
+          <a href="login.html" class="btn btn-dark btn-sm" data-i18n="nav_login">Log In</a>
+          <a href="signup.html" class="btn btn-primary btn-sm" data-i18n="nav_signup">Sign Up</a>
+        </div>
+
+        <!-- Authenticated User Controls -->
+        <div id="navUserBox" class="nav-auth-box" hidden>
+          <div class="user-badge-nav">
+            <span id="navAvatar" class="user-badge-avatar">U</span>
+            <span id="navUserName" class="user-badge-name">User</span>
+          </div>
+          <button type="button" id="navLogoutBtn" class="btn btn-dark btn-sm" data-i18n="nav_logout">Log Out</button>
+        </div>
+
+        <!-- Mobile Navigation Toggle -->
+        <button type="button" id="mobileNavToggle" class="mobile-nav-toggle" aria-label="Toggle navigation">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- CINEMATIC HERO SECTION -->
+    <section class="hero-laboratory" id="home">
+      <div class="container hero-grid">
+        <div class="hero-copy">
+          <div class="section-eyebrow eyebrow-dark" data-i18n="hero_eyebrow">
+            INTELLIGENT APPLICATION VERIFICATION
+          </div>
+
+          <h1>
+            <span data-i18n="hero_title_1">Submit with Confidence.</span><br>
+            <span class="highlight-violet" data-i18n="hero_title_2">Not with Doubt.</span>
+          </h1>
+
+          <p data-i18n="hero_subtitle">
+            Detect missing documents, identify file issues, and review application readiness before you submit.
+          </p>
+
+          <div class="hero-cta-row">
+            <a href="#checker" class="btn btn-primary btn-lg" data-i18n="hero_cta_primary">Check My Documents</a>
+            <a href="how-it-works.html" class="btn btn-outline-white btn-lg" data-i18n="hero_cta_secondary">Explore How It Works</a>
+          </div>
+
+          <div class="hero-trust-marker">
+            <span class="trust-check-icon">✓</span>
+            <span data-i18n="hero_trust_badge">Verified File Intelligence · Magic Bytes &amp; Checklist Validation</span>
+          </div>
+        </div>
+
+        <!-- Visual Centerpiece: Realistic Document Laboratory Preview -->
+        <div class="lab-centerpiece">
+          <div class="lab-scan-line" aria-hidden="true"></div>
+
+          <div class="lab-header">
+            <div>
+              <span class="badge badge-violet" data-i18n="lab_preview_badge">INTERACTIVE DEMO</span>
+              <h3 data-i18n="lab_doc_title" style="margin-top: 6px;">Candidate Document Audit</h3>
+            </div>
+            <span class="badge badge-warning" data-i18n="rep_badge_review">REVIEW REQUIRED</span>
+          </div>
+
+          <div class="lab-document-sample">
+            <div class="doc-sample-meta">
+              <span class="doc-sample-title">scholarship_packet_final.pdf</span>
+              <span>2.4 MB · PDF 1.7</span>
+            </div>
+
+            <div class="doc-sample-stages">
+              <div class="doc-stage-row">
+                <span class="doc-stage-name">
+                  <span style="color: var(--color-success);">✓</span>
+                  <span>Binary Header Check</span>
+                </span>
+                <span class="badge badge-success" data-i18n="lab_status_verified">Signature Valid (%PDF-)</span>
+              </div>
+
+              <div class="doc-stage-row">
+                <span class="doc-stage-name">
+                  <span style="color: var(--color-success);">✓</span>
+                  <span>Academic Transcript</span>
+                </span>
+                <span class="badge badge-success">marksheet_12th.pdf</span>
+              </div>
+
+              <div class="doc-stage-row">
+                <span class="doc-stage-name">
+                  <span style="color: var(--color-warning);">⚠️</span>
+                  <span>Income Certificate</span>
+                </span>
+                <span class="badge badge-warning" data-i18n="lab_status_missing">Missing Income Certificate</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Score Metric -->
+          <div class="lab-score-display">
+            <div>
+              <div class="lab-score-num">70<small style="font-size: 1rem; color: #94a3b8;">/100</small></div>
+            </div>
+            <div class="lab-score-desc">
+              <small data-i18n="lab_readiness_label">READINESS SCORE</small>
+              <strong data-i18n="rep_score_headline_review">Application Has Minor Issues</strong>
+            </div>
+          </div>
+
+          <p class="lab-disclaimer" data-i18n="lab_simulated_note">
+            Live Simulated Preview. Real audits are performed in the workspace below.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- DASHBOARD METRICS SECTION -->
+    <section class="metrics-section" id="dashboard">
+      <div class="container">
+        <div class="text-center">
+          <span class="section-eyebrow" data-i18n="dash_eyebrow">AUDIT ANALYTICS</span>
+          <h2 class="section-title" data-i18n="dash_heading">Application Dashboard</h2>
+          <p class="section-desc" data-i18n="dash_subtitle">Real-time verification metrics and quality overview across submissions.</p>
+        </div>
+
+        <div class="metrics-grid">
+          <!-- Stat 1 -->
+          <div class="metric-card">
+            <div class="metric-header">
+              <span class="metric-icon-box icon-purple-box">📄</span>
+              <span class="badge badge-violet">METRIC</span>
+            </div>
+            <div class="metric-number" id="statTotalChecks">0</div>
+            <div class="metric-label" data-i18n="dash_total_checks">Total Applications Checked</div>
+            <div class="metric-sub" data-i18n="dash_sub_total">Lifetime verified checks</div>
+          </div>
+
+          <!-- Stat 2 -->
+          <div class="metric-card">
+            <div class="metric-header">
+              <span class="metric-icon-box icon-red-box">⚠️</span>
+              <span class="badge badge-danger">DEFECTS</span>
+            </div>
+            <div class="metric-number" id="statTotalErrors">0</div>
+            <div class="metric-label" data-i18n="dash_errors_detected">Errors Detected</div>
+            <div class="metric-sub" data-i18n="dash_sub_errors">Binary signature &amp; extension issues</div>
+          </div>
+
+          <!-- Stat 3 -->
+          <div class="metric-card">
+            <div class="metric-header">
+              <span class="metric-icon-box icon-amber-box">📑</span>
+              <span class="badge badge-warning">CHECKLIST</span>
+            </div>
+            <div class="metric-number" id="statMissingDocs">0</div>
+            <div class="metric-label" data-i18n="dash_missing_docs">Missing Documents</div>
+            <div class="metric-sub" data-i18n="dash_sub_missing">Required certificates omitted</div>
+          </div>
+
+          <!-- Stat 4 -->
+          <div class="metric-card">
+            <div class="metric-header">
+              <span class="metric-icon-box icon-green-box">🎯</span>
+              <span class="badge badge-success">QUALITY</span>
+            </div>
+            <div class="metric-number" id="statAvgScore">--</div>
+            <div class="metric-label" data-i18n="dash_avg_score">Average Readiness Score</div>
+            <div class="metric-sub" data-i18n="dash_sub_score">Overall application health</div>
+          </div>
+        </div>
+
+        <div id="metricsGuestBanner" class="metrics-guest-banner" hidden>
+          <span>💡</span>
+          <span data-i18n="dash_guest_notice">You are in guest mode. Log in to permanently record and access your application reports.</span>
+          <a href="login.html" data-i18n="nav_login" style="margin-left: auto;">Log In →</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- DOCUMENT VERIFICATION WORKSPACE -->
+    <section class="workspace-section" id="checker">
+      <div class="container">
+        <div class="text-center">
+          <span class="section-eyebrow" data-i18n="ws_eyebrow">VERIFICATION WORKSPACE</span>
+          <h2 class="section-title" data-i18n="ws_heading">Audit Your Application Documents</h2>
+          <p class="section-desc" data-i18n="ws_subtitle">Upload supporting PDFs or images. FormFix AI inspects binary headers and verifies mandatory requirements.</p>
+        </div>
+
+        <div class="workspace-card">
+          <form id="applicationForm" class="workspace-form">
+            <!-- Application Type -->
+            <div class="form-group">
+              <label for="applicationType" class="form-label" data-i18n="ws_app_type_label">Application Type</label>
+              <select id="applicationType" name="applicationType" required class="form-select">
+                <option value="scholarship" data-i18n="ws_opt_scholarship">Scholarship Application</option>
+                <option value="college" data-i18n="ws_opt_college">College / University Admission</option>
+                <option value="internship" data-i18n="ws_opt_internship">Internship &amp; Job Application</option>
+                <option value="other" data-i18n="ws_opt_other">Other Official Application</option>
+              </select>
+            </div>
+
+            <!-- Application Title -->
+            <div class="form-group">
+              <label for="applicantName" class="form-label" data-i18n="ws_app_name_label">Applicant / Application Title (Optional)</label>
+              <input id="applicantName" name="applicantName" type="text" maxlength="140"
+                     class="form-input" data-i18n-placeholder="ws_app_name_placeholder"
+                     placeholder="e.g., National Merit Scholarship - Sakshi P.">
+            </div>
+
+            <!-- Mandatory Checklist -->
+            <div class="form-group">
+              <label class="form-label" data-i18n="ws_checklist_label">Mandatory Checklist Requirements</label>
+              <p class="form-hint" data-i18n="ws_checklist_hint">Items marked for your application category. Select the documents required for your submission.</p>
+              
+              <div class="checklist-container" id="checklist">
+                <label class="checklist-item">
+                  <input type="checkbox" value="identity" checked>
+                  <span data-i18n="ws_chk_identity">Identity Proof (Aadhaar, Passport, PAN)</span>
+                </label>
+                <label class="checklist-item">
+                  <input type="checkbox" value="marksheet" checked>
+                  <span data-i18n="ws_chk_marksheet">Marksheet / Academic Transcript</span>
+                </label>
+                <label class="checklist-item">
+                  <input type="checkbox" value="photo">
+                  <span data-i18n="ws_chk_photo">Passport Size Photograph</span>
+                </label>
+                <label class="checklist-item">
+                  <input type="checkbox" value="signature">
+                  <span data-i18n="ws_chk_signature">Signature Specimen</span>
+                </label>
+                <label class="checklist-item">
+                  <input type="checkbox" value="income">
+                  <span data-i18n="ws_chk_income">Income / Domicile Certificate</span>
+                </label>
+              </div>
+            </div>
+
+            <!-- Drag and Drop Zone -->
+            <div class="form-group">
+              <label class="form-label">Upload Documents</label>
+              <div class="dropzone-box" id="uploadZone">
+                <input id="documents" name="documents" type="file" multiple accept=".pdf,.jpg,.jpeg,.png" class="file-input-hidden">
+                <div class="dropzone-icon">↑</div>
+                <div class="dropzone-text">
+                  <strong data-i18n="ws_dropzone_title">Drag &amp; drop files here, or</strong>
+                  <span data-i18n="ws_dropzone_browse">browse from device</span>
+                </div>
+                <p class="dropzone-sub" data-i18n="ws_dropzone_sub">
+                  Accepts genuine PDF, JPG, PNG · Up to 5 MB per file · Up to 10 files
+                </p>
+              </div>
+
+              <!-- Selected Files Queue -->
+              <div id="fileList" class="selected-files-queue"></div>
+            </div>
+
+            <!-- Submit Action -->
+            <div class="form-group">
+              <button type="submit" id="checkSubmitBtn" class="btn btn-primary btn-block btn-lg">
+                <span id="btnText" data-i18n="ws_btn_submit">Run Document Verification</span>
+                <span id="btnSpinner" class="spinner-inline" hidden></span>
+              </button>
+            </div>
+
+            <div id="formAlertBanner" class="form-alert-banner" hidden role="alert"></div>
+          </form>
+
+          <!-- Real Audit Report (Populated by backend) -->
+          <div id="reportResult" class="report-interface" hidden aria-live="polite">
+            <div class="report-interface-header">
+              <div>
+                <span class="section-eyebrow" data-i18n="rep_eyebrow">AUDIT REPORT</span>
+                <h3 data-i18n="rep_heading" style="color: var(--color-midnight); font-size: 1.3rem;">Verification Diagnosis</h3>
+              </div>
+              <span id="repBadge" class="badge badge-warning">REVIEW</span>
+            </div>
+
+            <!-- Score Panel -->
+            <div class="report-score-panel">
+              <div class="score-display-box">
+                <div class="score-display-val" id="repScoreVal">--</div>
+                <div class="score-display-scale">/ 100</div>
+              </div>
+              <div class="score-display-text">
+                <h4 id="repScoreHeadline">Readiness Assessment</h4>
+                <p id="repSummary">Your diagnostic summary will appear here.</p>
+              </div>
+            </div>
+
+            <!-- Inspected Files Stack -->
+            <div class="report-section-block">
+              <h4 class="report-section-title" data-i18n="rep_sec_files">Inspected Files &amp; Signatures</h4>
+              <div id="repFilesStack" class="report-files-stack"></div>
+            </div>
+
+            <!-- Issues & Guidance -->
+            <div class="report-issues-box">
+              <h4 class="report-section-title" data-i18n="rep_sec_issues">Detailed Issues &amp; Corrective Guidance</h4>
+              <ul id="repIssuesList" class="report-issues-list"></ul>
+            </div>
+
+            <!-- Action Controls -->
+            <div class="report-action-buttons">
+              <button type="button" id="resetCheckBtn" class="btn btn-secondary" data-i18n="rep_btn_new">Start New Check</button>
+              <button type="button" id="printReportBtn" class="btn btn-dark" data-i18n="rep_btn_print">Print / Save PDF Report</button>
+              <a href="reports.html" class="btn btn-primary" data-i18n="rep_btn_view_history">View In My Reports →</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CORE BENEFITS SECTION -->
+    <section class="container" style="padding: 70px 24px;">
+      <div class="text-center">
+        <span class="section-eyebrow" data-i18n="feat_hero_eyebrow">SYSTEM CAPABILITIES</span>
+        <h2 class="section-title" data-i18n="feat_hero_title">Built for Flawless Submissions</h2>
+        <p class="section-desc" data-i18n="feat_hero_sub">Engineered specifically to protect applicants from bureaucratic rejection, file corruption, and missed deadlines.</p>
+      </div>
+
+      <div class="features-page-grid">
+        <div class="feature-box">
+          <div class="feature-box-icon icon-purple-box">🔍</div>
+          <h3 data-i18n="feat_1_title">PDF &amp; Image Binary Verification</h3>
+          <p data-i18n="feat_1_desc">Scans actual magic bytes (%PDF-, JPEG 0xFFD8FF, PNG) instead of blindly relying on file extensions.</p>
+        </div>
+
+        <div class="feature-box">
+          <div class="feature-box-icon icon-amber-box">📑</div>
+          <h3 data-i18n="feat_2_title">Missing Document Heuristics</h3>
+          <p data-i18n="feat_2_desc">Evaluates uploaded documents against strict scholarship, admission, and job checklist criteria.</p>
+        </div>
+
+        <div class="feature-box">
+          <div class="feature-box-icon icon-green-box">🎯</div>
+          <h3 data-i18n="feat_3_title">Readiness Scoring Engine</h3>
+          <p data-i18n="feat_3_desc">An objective 0–100 scale evaluating complete file integrity and checklist compliance.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- PROFESSIONAL FOOTER -->
+  <footer class="site-footer">
+    <div class="container footer-columns">
+      <div class="footer-brand">
+        <a class="brand" href="index.html">
+          <span class="brand-symbol">F</span>
+          <span>FormFix <span class="brand-ai-tag">AI</span></span>
+        </a>
+        <p data-i18n="brand_tagline">Every Detail Matters. Every Application Deserves a Second Chance.</p>
+      </div>
+
+      <div class="footer-nav-col">
+        <h4 data-i18n="footer_nav_heading">Navigation</h4>
+        <div class="footer-nav-links">
+          <a href="index.html" data-i18n="nav_home">Home</a>
+          <a href="features.html" data-i18n="nav_features">Features</a>
+          <a href="how-it-works.html" data-i18n="nav_how_it_works">How It Works</a>
+          <a href="reports.html" data-i18n="nav_reports">My Reports</a>
+          <a href="login.html" data-i18n="nav_login">Log In</a>
+        </div>
+      </div>
+
+      <div class="footer-legal-col">
+        <h4 data-i18n="footer_legal_heading">Integrity &amp; Privacy</h4>
+        <p data-i18n="footer_disclaimer">
+          FormFix AI is an automated preparatory auditing tool. Always verify mandatory rules with your official admissions or granting authority.
+        </p>
+        <small data-i18n="footer_rights">© 2026 FormFix AI. All rights reserved.</small>
+      </div>
+    </div>
+  </footer>
+
+  <script src="i18n.js"></script>
+  <script src="web.js"></script>
+</body>
+</html>
