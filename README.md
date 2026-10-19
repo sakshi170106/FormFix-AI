@@ -41,15 +41,20 @@ FormFix AI aims to simplify this process by providing an easy-to-use interface f
 - Clear error messages
 - Organized application information
 
+
 ## 🛠️ Technologies Used
 
-- HTML5
-- CSS3
+### Frontend
+- HTML
+- CSS
 - JavaScript
+
+### Backend
 - Node.js
 - Express.js
 
-Additional technologies and database integrations may be used depending on the project configuration.
+### Database
+- MongoDB
 
 ## 📁 Project Structure
 
