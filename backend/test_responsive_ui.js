@@ -98,16 +98,23 @@ targetViewports.forEach(vp => {
   }
 });
 
-// 5. Ensure no conflicting sidebar or legacy class overrides in styles.css
-console.log('\n[5] Clean Stylesheet Integrity Check');
+// 5. Language Selector & Hamburger Icon Non-Overlap Audit
+console.log('\n[5] Language Selector & Hamburger Non-Overlap & Stacking Rules');
+assert(css.includes('.lang-selector-wrapper') && css.includes('flex-shrink: 0'), 'Language selector wrapper has flex-shrink: 0 to prevent flex compression');
+assert(css.includes('.mobile-nav-toggle') && css.includes('z-index: 2'), 'Mobile nav toggle has z-index: 2 ensuring it is not covered by language selector');
+assert(css.includes('.mobile-nav-toggle span') && css.includes('pointer-events: none'), 'Hamburger spans have pointer-events: none preventing event capture');
+assert(css.includes('.nav-controls .nav-auth-box') && css.includes('display: none'), 'Header bar hides auth buttons on mobile viewports leaving ample room for language selector and toggle');
+
+// 6. Ensure no conflicting sidebar or legacy class overrides in styles.css
+console.log('\n[6] Clean Stylesheet Integrity Check');
 assert(!css.includes('.sidebar {'), 'No extraneous .sidebar rules in styles.css');
 assert(!css.includes('.dashboard-grid {'), 'No extraneous .dashboard-grid rules in styles.css');
 assert(css.includes('.mobile-nav-toggle[aria-expanded="true"]'), 'Hamburger animated morphing rule defined for aria-expanded="true"');
 assert(css.includes('.nav-links.nav-mobile-open'), 'nav-mobile-open mobile dropdown display rule present');
 assert(css.includes('overflow-x: auto;'), 'Table wrapper has overflow-x: auto for swipeable tables');
 
-// 6. Inspect JavaScript mobile nav handlers in public/web.js
-console.log('\n[6] JavaScript Navbar Interaction Handlers in public/web.js');
+// 7. Inspect JavaScript mobile nav handlers in public/web.js
+console.log('\n[7] JavaScript Navbar Interaction Handlers in public/web.js');
 const webJs = fs.readFileSync(path.join(publicDir, 'web.js'), 'utf8');
 
 assert(webJs.includes('mobileToggle.setAttribute("aria-expanded", "true")'), 'web.js sets aria-expanded="true" when opened');
@@ -118,8 +125,8 @@ assert(webJs.includes('window.innerWidth > 768'), 'web.js resets mobile menu sta
 assert(webJs.includes('isSignupSubmitting'), 'web.js prevents duplicate signup submissions');
 assert(webJs.includes('temporarily unavailable') || webJs.includes('starting up'), 'web.js provides user-friendly explanation for cold-start (502/503)');
 
-// 7. Inspect Mobile Drawer Auth Section
-console.log('\n[7] Mobile Drawer Navigation & Auth Links');
+// 8. Inspect Mobile Drawer Auth Section
+console.log('\n[8] Mobile Drawer Navigation & Auth Links');
 htmlFiles.forEach(file => {
   const content = fs.readFileSync(path.join(publicDir, file), 'utf8');
   assert(
@@ -128,8 +135,8 @@ htmlFiles.forEach(file => {
   );
 });
 
-// 8. Behavioral Testing of Mobile Nav State Machine (Simulated Execution)
-console.log('\n[8] Behavioral Test: Mobile Nav State Transitions & ARIA Synchronization');
+// 9. Behavioral Testing of Mobile Nav State Machine (Simulated Execution)
+console.log('\n[9] Behavioral Test: Mobile Nav State Transitions & ARIA Synchronization');
 {
   class MockElement {
     constructor(id = '', className = '') {
@@ -179,8 +186,8 @@ console.log('\n[8] Behavioral Test: Mobile Nav State Transitions & ARIA Synchron
   assert(!mockNavLinks.classList.contains('nav-mobile-open') && mockToggle.getAttribute('aria-expanded') === 'false', 'Resize to 1024px: drawer automatically reset to closed');
 }
 
-// 9. Explicit Browser & Device Environment Limitations Report
-console.log('\n[9] Environment & Device Limitations Transparency');
+// 10. Explicit Browser & Device Environment Limitations Report
+console.log('\n[10] Environment & Device Limitations Transparency');
 console.log('  ℹ NOTE: Real mobile device testing (touch screen gestures, physical Android Chrome rendering) requires physical hardware or Cloud Device Farms.');
 console.log('  ℹ NOTE: Playwright/Puppeteer browser automation is not installed in package.json.');
 console.log('  ✓ PASS: CSS layout constraints, media query breakpoints, flex order, touch target metrics, and state machines programmatically verified.');

@@ -1698,8 +1698,31 @@ img, svg {
     margin-left: auto;
     display: flex;
     align-items: center;
-    gap: 6px;
+    gap: 8px;
     flex: 0 0 auto;
+    position: relative;
+    z-index: 5;
+  }
+
+  .lang-selector-wrapper {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    flex-shrink: 0;
+    z-index: 1;
+  }
+
+  .language-select {
+    padding: 6px 24px 6px 8px;
+    font-size: 0.78rem;
+    max-width: 82px;
+    height: 36px;
+    cursor: pointer;
+  }
+
+  .lang-arrow {
+    right: 7px;
+    pointer-events: none;
   }
 
   .mobile-nav-toggle {
@@ -1709,7 +1732,17 @@ img, svg {
     width: 44px;
     height: 44px;
     flex-shrink: 0;
+    position: relative;
+    z-index: 2;
+    margin-left: 4px;
     order: 10;
+    cursor: pointer;
+  }
+
+  .mobile-nav-toggle span {
+    pointer-events: none;
+    position: relative;
+    z-index: 2;
   }
 
   .nav-links {
@@ -2015,10 +2048,15 @@ img, svg {
     gap: 6px;
   }
 
+  .nav-controls .nav-auth-box {
+    display: none; /* Prominently accessible in the mobile drawer */
+  }
+
   .language-select {
     padding: 5px 18px 5px 6px;
     font-size: 0.75rem;
     max-width: 76px;
+    height: 34px;
   }
 
   .nav-auth-box {
@@ -2178,6 +2216,11 @@ img, svg {
     max-width: 68px;
     padding: 5px 16px 5px 5px;
     font-size: 0.7rem;
+    height: 32px;
+  }
+
+  .mobile-nav-toggle {
+    margin-left: 2px;
   }
 
   .nav-auth-box {
