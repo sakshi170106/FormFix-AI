@@ -1677,3 +1677,88 @@ img, svg {
     text-align: center;
   }
 }
+/* Mobile Responsive Design */
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  width: 100%;
+  max-width: 100%;
+  margin: 0;
+  overflow-x: hidden;
+}
+
+img,
+video,
+canvas {
+  max-width: 100%;
+  height: auto;
+}
+
+button,
+input,
+select,
+textarea {
+  max-width: 100%;
+  font: inherit;
+}
+
+@media (max-width: 768px) {
+  .container,
+  .main-content,
+  .dashboard,
+  .content {
+    width: 100%;
+    max-width: 100%;
+    margin-left: 0;
+    margin-right: 0;
+    padding: 16px;
+  }
+
+  .sidebar {
+    display: none;
+  }
+
+  .stats-grid,
+  .cards-grid,
+  .dashboard-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+  }
+
+  .card {
+    min-width: 0;
+    width: 100%;
+  }
+
+  h1 {
+    font-size: clamp(24px, 6vw, 32px);
+  }
+
+  button {
+    min-height: 44px;
+  }
+
+  input,
+  select,
+  textarea {
+    width: 100%;
+    min-width: 0;
+  }
+
+  table {
+    display: block;
+    max-width: 100%;
+    overflow-x: auto;
+  }
+}
+
+@media (max-width: 480px) {
+  .stats-grid,
+  .cards-grid,
+  .dashboard-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
