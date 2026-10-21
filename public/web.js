@@ -40,11 +40,15 @@ const AuthState = {
 // ==========================================================================
 
 function getApiUrl(endpoint) {
-  // If running via Live Server or another port (e.g., 5500, 3000, 8080) and Express is on 5000,
-  // automatically route API calls to the Express backend on port 5000.
+  if (typeof window === "undefined" || !window.location) {
+    return endpoint;
+  }
+  // If running via file:// protocol
+  if (window.location.protocol === "file:") {
+    return `http://localhost:5000${endpoint}`;
+  }
+  // If running via Live Server or custom dev port (5500, 3000, 8080) and Express is on 5000
   if (
-    typeof window !== "undefined" &&
-    window.location &&
     window.location.port &&
     window.location.port !== "5000" &&
     (window.location.hostname === "localhost" || window.location.hostname === "127.0.0.1")
@@ -60,7 +64,7 @@ async function safeFetchJson(url, options = {}) {
   try {
     res = await fetch(finalUrl, options);
   } catch (netErr) {
-    throw new Error(`Network error: Unable to connect to backend server at ${finalUrl}. Please ensure the FormFix AI server is running on port 5000.`);
+    throw new Error("Network connection error: Unable to reach backend server. Please check your internet connection or server status.");
   }
 
   const contentType = res.headers.get("content-type") || "";
@@ -68,7 +72,10 @@ async function safeFetchJson(url, options = {}) {
 
   if (!text || text.trim().length === 0) {
     if (res.status === 405) {
-      throw new Error("HTTP 405 (Method Not Allowed): The server serving this page does not accept POST requests. Please open FormFix AI directly via the Express server at http://localhost:5000.");
+      throw new Error("HTTP 405 (Method Not Allowed): The server serving this page does not accept POST requests. Please verify API routing.");
+    }
+    if (res.status === 502 || res.status === 503 || res.status === 504) {
+      throw new Error(`The backend server is temporarily unavailable or starting up (HTTP ${res.status}). Please wait a moment and try again.`);
     }
     throw new Error(`Server returned HTTP ${res.status} with an empty response.`);
   }
@@ -78,14 +85,17 @@ async function safeFetchJson(url, options = {}) {
     try {
       data = JSON.parse(text);
     } catch (_) {
-      throw new Error(`Server returned unparseable JSON (HTTP ${res.status}): ${text.slice(0, 100)}`);
+      throw new Error(`Server returned unparseable JSON (HTTP ${res.status}).`);
     }
   } else {
     // HTML or plain text response
     if (res.status === 405) {
-      throw new Error("HTTP 405 (Method Not Allowed): The server serving this page does not accept POST requests. Please open FormFix AI directly via the Express server at http://localhost:5000.");
+      throw new Error("HTTP 405 (Method Not Allowed): POST request was not accepted by the endpoint.");
     }
-    throw new Error(`Server returned HTTP ${res.status} (${res.statusText || "Unexpected format"}).`);
+    if (res.status === 502 || res.status === 503 || res.status === 504) {
+      throw new Error(`Gateway timeout or backend unavailable (HTTP ${res.status}). The upstream server may be starting up or slow to respond.`);
+    }
+    throw new Error(`Server returned HTTP ${res.status} (${res.statusText || "Non-JSON response"}).`);
   }
 
   return { ok: res.ok, status: res.status, data };
@@ -100,21 +110,67 @@ function initNavbar() {
   const navLinks = $("#navLinks");
 
   if (mobileToggle && navLinks) {
-    mobileToggle.addEventListener("click", () => {
-      navLinks.classList.toggle("nav-mobile-open");
+    const setMenuOpen = (open) => {
+      const isCurrentlyOpen = navLinks.classList.contains("nav-mobile-open");
+      const shouldOpen = typeof open === "boolean" ? open : !isCurrentlyOpen;
+
+      if (shouldOpen) {
+        navLinks.classList.add("nav-mobile-open");
+        mobileToggle.setAttribute("aria-expanded", "true");
+      } else {
+        navLinks.classList.remove("nav-mobile-open");
+        mobileToggle.setAttribute("aria-expanded", "false");
+      }
+    };
+
+    mobileToggle.addEventListener("click", (e) => {
+      e.stopPropagation();
+      setMenuOpen();
     });
 
-    $$(".nav-link").forEach(link => {
+    // Close menu when any link inside navLinks is clicked
+    navLinks.querySelectorAll("a").forEach(link => {
       link.addEventListener("click", () => {
-        navLinks.classList.remove("nav-mobile-open");
+        setMenuOpen(false);
       });
+    });
+
+    const mLogout = $("#navMobileLogoutBtn");
+    if (mLogout) {
+      mLogout.addEventListener("click", () => {
+        setMenuOpen(false);
+      });
+    }
+
+    // Close when clicking outside of nav menu & toggle
+    document.addEventListener("click", (e) => {
+      if (navLinks.classList.contains("nav-mobile-open")) {
+        if (!navLinks.contains(e.target) && !mobileToggle.contains(e.target)) {
+          setMenuOpen(false);
+        }
+      }
+    });
+
+    // Close when Escape key is pressed
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && navLinks.classList.contains("nav-mobile-open")) {
+        setMenuOpen(false);
+        mobileToggle.focus();
+      }
+    });
+
+    // Reset mobile menu if resized to desktop
+    window.addEventListener("resize", () => {
+      if (window.innerWidth > 768 && navLinks.classList.contains("nav-mobile-open")) {
+        setMenuOpen(false);
+      }
     });
   }
 
   // Highlight active link based on current path
   const currentPath = window.location.pathname.toLowerCase();
   $$(".nav-link").forEach(link => {
-    const href = link.getAttribute("href").toLowerCase();
+    const href = link.getAttribute("href") ? link.getAttribute("href").toLowerCase() : "";
     if (
       (currentPath.endsWith("/") || currentPath.endsWith("index.html")) && (href === "/" || href === "index.html" || href === "#home")
     ) {
@@ -137,10 +193,37 @@ async function syncNavbarAuth() {
   const userName = $("#navUserName");
   const logoutBtn = $("#navLogoutBtn");
 
-  const token = AuthState.getToken();
-  if (!token) {
+  const mGuestBox = $("#navMobileGuestBox");
+  const mUserBox = $("#navMobileUserBox");
+  const mAvatar = $("#navMobileAvatar");
+  const mUserName = $("#navMobileUserName");
+  const mLogoutBtn = $("#navMobileLogoutBtn");
+
+  const applyGuest = () => {
     if (guestBox) guestBox.hidden = false;
     if (userBox) userBox.hidden = true;
+    if (mGuestBox) mGuestBox.hidden = false;
+    if (mUserBox) mUserBox.hidden = true;
+  };
+
+  const applyUser = (user) => {
+    if (guestBox) guestBox.hidden = true;
+    if (userBox) userBox.hidden = false;
+    if (mGuestBox) mGuestBox.hidden = true;
+    if (mUserBox) mUserBox.hidden = false;
+    const initial = (user.name || user.email || "U").charAt(0).toUpperCase();
+    const displayName = user.name || user.email || "User";
+    if (avatar) avatar.textContent = initial;
+    if (userName) userName.textContent = displayName;
+    if (mAvatar) mAvatar.textContent = initial;
+    if (mUserName) mUserName.textContent = displayName;
+    if (logoutBtn) logoutBtn.onclick = handleLogout;
+    if (mLogoutBtn) mLogoutBtn.onclick = handleLogout;
+  };
+
+  const token = AuthState.getToken();
+  if (!token) {
+    applyGuest();
     return;
   }
 
@@ -151,33 +234,24 @@ async function syncNavbarAuth() {
 
     if (ok && data && data.success && data.user) {
       AuthState.setSession(token, data.user);
-      if (guestBox) guestBox.hidden = true;
-      if (userBox) userBox.hidden = false;
-      const initial = (data.user.name || data.user.email || "U").charAt(0).toUpperCase();
-      if (avatar) avatar.textContent = initial;
-      if (userName) userName.textContent = data.user.name || data.user.email;
-      if (logoutBtn) logoutBtn.onclick = handleLogout;
+      applyUser(data.user);
       return;
     }
     // Stale or invalid token
     AuthState.clearSession();
-    if (guestBox) guestBox.hidden = false;
-    if (userBox) userBox.hidden = true;
+    applyGuest();
   } catch (_) {
     // Offline fallback to stored user info
     const cachedUser = AuthState.getUser();
-    if (cachedUser && guestBox && userBox) {
-      guestBox.hidden = true;
-      userBox.hidden = false;
-      if (avatar) avatar.textContent = (cachedUser.name || "U").charAt(0).toUpperCase();
-      if (userName) userName.textContent = cachedUser.name || cachedUser.email;
-      if (logoutBtn) logoutBtn.onclick = handleLogout;
+    if (cachedUser) {
+      applyUser(cachedUser);
+    } else {
+      applyGuest();
     }
   }
 
-  if (logoutBtn) {
-    logoutBtn.onclick = handleLogout;
-  }
+  if (logoutBtn) logoutBtn.onclick = handleLogout;
+  if (mLogoutBtn) mLogoutBtn.onclick = handleLogout;
 }
 
 async function handleLogout() {
@@ -679,25 +753,35 @@ function initAuthPages() {
   });
 
   // LOGIN PAGE
+  let isLoginSubmitting = false;
   const pageLoginForm = $("#pageLoginForm");
   if (pageLoginForm) {
     pageLoginForm.addEventListener("submit", async (e) => {
       e.preventDefault();
+      if (isLoginSubmitting) return;
+
       const alert = $("#loginAlert");
       const btn = $("#loginSubmitBtn");
-      const spinner = btn.querySelector(".spinner-inline");
+      const spinner = btn ? btn.querySelector(".spinner-inline") : null;
       if (alert) alert.hidden = true;
-      btn.disabled = true;
+
+      const email = $("#loginEmail") ? $("#loginEmail").value.trim() : "";
+      const password = $("#loginPassword") ? $("#loginPassword").value : "";
+
+      if (!email || !password) {
+        if (alert) {
+          alert.className = "form-alert-banner alert-error";
+          alert.textContent = "Please enter both email and password.";
+          alert.hidden = false;
+        }
+        return;
+      }
+
+      isLoginSubmitting = true;
+      if (btn) btn.disabled = true;
       if (spinner) spinner.hidden = false;
 
       try {
-        const email = $("#loginEmail") ? $("#loginEmail").value.trim() : "";
-        const password = $("#loginPassword") ? $("#loginPassword").value : "";
-
-        if (!email || !password) {
-          throw new Error("Please enter both email and password.");
-        }
-
         const { ok, data } = await safeFetchJson("/api/auth/login", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
@@ -713,17 +797,23 @@ function initAuthPages() {
       } catch (err) {
         if (alert) {
           alert.className = "form-alert-banner alert-error";
-          alert.textContent = err.message;
+          if (err.message.includes("502") || err.message.includes("503") || err.message.includes("504") || err.message.includes("Gateway timeout")) {
+            alert.textContent = "The backend service is temporarily unavailable or starting up (HTTP 502/504). Please wait a moment and try logging in again.";
+          } else {
+            alert.textContent = err.message;
+          }
           alert.hidden = false;
         }
       } finally {
-        btn.disabled = false;
+        isLoginSubmitting = false;
+        if (btn) btn.disabled = false;
         if (spinner) spinner.hidden = true;
       }
     });
   }
 
   // SIGNUP PAGE
+  let isSignupSubmitting = false;
   const pageSignupForm = $("#pageSignupForm");
   const passInput = $("#signupPassword");
   const confirmPassInput = $("#signupConfirmPassword");
@@ -758,6 +848,8 @@ function initAuthPages() {
   if (pageSignupForm) {
     pageSignupForm.addEventListener("submit", async (e) => {
       e.preventDefault();
+      if (isSignupSubmitting) return;
+
       const alert = $("#signupAlert");
       const btn = $("#signupSubmitBtn");
       const spinner = btn ? btn.querySelector(".spinner-inline") : null;
@@ -786,18 +878,20 @@ function initAuthPages() {
         return;
       }
 
+      isSignupSubmitting = true;
       if (btn) btn.disabled = true;
       if (spinner) spinner.hidden = false;
 
       try {
-        const { ok, data } = await safeFetchJson("/api/auth/register", {
+        const { ok, status, data } = await safeFetchJson("/api/auth/register", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ name, email, password })
         });
 
         if (!ok || !data || !data.success) {
-          throw new Error((data && data.message) || "Registration failed");
+          const msg = (data && data.message) || "Registration failed";
+          throw new Error(msg);
         }
 
         AuthState.setSession(data.token, data.user);
@@ -805,10 +899,17 @@ function initAuthPages() {
       } catch (err) {
         if (alert) {
           alert.className = "form-alert-banner alert-error";
-          alert.textContent = err.message;
+          if (err.message.includes("502") || err.message.includes("503") || err.message.includes("504") || err.message.includes("Gateway timeout") || err.message.includes("unavailable")) {
+            alert.innerHTML = `The server took longer than expected to respond (HTTP 502/504). If the backend was waking up, your account may already have been created. Please try <a href="login.html" style="text-decoration: underline; font-weight: bold; color: inherit;">logging in</a>, or wait a moment and try again.`;
+          } else if (err.message.includes("already exists")) {
+            alert.innerHTML = `${escapeHTML(err.message)} <a href="login.html" style="text-decoration: underline; font-weight: bold; color: inherit;">Click here to Log In</a>`;
+          } else {
+            alert.textContent = err.message;
+          }
           alert.hidden = false;
         }
       } finally {
+        isSignupSubmitting = false;
         if (btn) btn.disabled = false;
         if (spinner) spinner.hidden = true;
       }
@@ -831,13 +932,19 @@ function escapeHTML(str = "") {
 // 6. GLOBAL INITIALIZATION
 // ==========================================================================
 
-document.addEventListener("DOMContentLoaded", () => {
+function initApp() {
   initNavbar();
   initWorkspace();
   initReportsPage();
   initAuthPages();
   fetchDashboardMetrics();
-});
+}
+
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", initApp);
+} else {
+  initApp();
+}
 
 window.addEventListener("formfix_lang_changed", () => {
   // Re-render components with translated dynamic labels

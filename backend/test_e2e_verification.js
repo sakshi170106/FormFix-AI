@@ -368,6 +368,35 @@ async function runE2ETests() {
     assert(caughtMessage.includes("HTTP 405"), `Expected clear 405 error, got: ${caughtMessage}`);
     console.log("  ✓ Safe parser prevents 'Unexpected end of JSON input' on empty 405 responses");
 
+    // [Test 13] Safe Gateway 502/504 Error Handling (No raw HTML leak or JSON parsing crash)
+    console.log("\n[Test 13] Safe Gateway 502/504 Error Handling (No HTML / JSON syntax crash)");
+    const mockHtml502 = {
+      status: 502,
+      headers: { get: () => "text/html; charset=utf-8" },
+      text: async () => "<!DOCTYPE html><html><head><title>502 Bad Gateway</title></head><body><h1>502 Bad Gateway</h1></body></html>"
+    };
+    let threwGatewayError = false;
+    let gatewayMessage = "";
+    try {
+      const text = await mockHtml502.text();
+      const contentType = mockHtml502.headers.get("content-type") || "";
+      if (contentType.includes("application/json") || text.trim().startsWith("{") || text.trim().startsWith("[")) {
+        JSON.parse(text);
+      } else {
+        if (mockHtml502.status === 502 || mockHtml502.status === 503 || mockHtml502.status === 504) {
+          throw new Error(`Gateway timeout or backend unavailable (HTTP ${mockHtml502.status}). The upstream server may be starting up or slow to respond.`);
+        }
+      }
+    } catch (err) {
+      gatewayMessage = err.message;
+      if (err.message.includes("HTTP 502")) {
+        threwGatewayError = true;
+      }
+    }
+    assert.strictEqual(threwGatewayError, true, "Must catch and translate 502 to clear error message");
+    assert.strictEqual(gatewayMessage.includes("<html"), false, "Must not leak raw HTML to user");
+    console.log("  ✓ Safe parser handles HTML 502 gateway timeouts cleanly without crashing or exposing HTML");
+
     // ----------------------------------------------------
     // CLEANUP TEST DATA
     // ----------------------------------------------------

@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node server.js",
     "dev": "node --watch server.js",
-    "test": "node test_backend.js && node test_server_http.js && node test_checks_authenticated.js && node test_multipage_routes.js && node audit_frontend.js && node test_e2e_verification.js",
+    "test": "node test_backend.js && node test_server_http.js && node test_checks_authenticated.js && node test_multipage_routes.js && node audit_frontend.js && node test_responsive_ui.js && node test_e2e_verification.js",
     "verify:atlas": "node verify_mongodb_atlas.js"
   },
   "engines": {
